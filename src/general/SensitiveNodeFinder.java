@@ -31,6 +31,11 @@ public class SensitiveNodeFinder {
                 if (j.getGate().equals(Character.toString(i.getName()))) {
                     j.value = i.getValue(line);
                 }
+                else if (j.getGate().contains("not") && !j.getGate().contains("out")){
+                    if(j.getGate().contains(Character.toString(i.getName()))){
+                        j.value = swapInput(i.getValue(line));
+                    }
+                }
                 else if (j.getGate().equals("out")){
                     j.value = ttOut.get(line);
                 }
@@ -89,6 +94,7 @@ public class SensitiveNodeFinder {
                     }
                 }
             }
+            if (sensitiveNodes.isEmpty()) sensitiveNodes.add("out");
             System.out.print("sensitive nodes from line " + line + ": ");
             for (String node : sensitiveNodes){
                 System.out.print(node + " ");
@@ -97,17 +103,19 @@ public class SensitiveNodeFinder {
             sensitiveNodes.clear();
         }
 
-       /*while (iter.hasNext()) {
+        /*atribuiValorAosTransistores(1);
+        Iterator<String> iter = new DepthFirstIterator<>(graph);
+        while (iter.hasNext()) {
             String vertex = iter.next();
             System.out
                     .println(
                             "Vertex " + vertex + " is connected to: "
                                     + graph.edgesOf(vertex).toString());
-        }*/
+        }
 
         for (String node : sensitiveNodes){
             System.out.println(node);
-        }
+        }*/
     }
 
     public boolean pullDownPathAnalysis (String allEdges){
@@ -146,6 +154,14 @@ public class SensitiveNodeFinder {
             cont = 0;
         }
         return true;
+    }
+    private Integer swapInput (Integer input){
+        if(input == 0)
+            input = 1;
+        else if (input == 1)
+            input = 0;
+
+        return input;
     }
 
 }

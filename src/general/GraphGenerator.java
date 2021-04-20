@@ -69,7 +69,16 @@ public class GraphGenerator {
         for (String line : netlist){
             StringTokenizer lineT = new StringTokenizer(line, " ");
             while(lineT.hasMoreTokens()){
-                transistor.add(new Transistor(lineT.nextToken()));
+                String transistorName = lineT.nextToken();
+                if (transistorName.contains("inv")){
+                    int i = 5;
+                    while (i > 0){
+                        lineT.nextToken();
+                        i--;
+                    }
+                    break;
+                }
+                transistor.add(new Transistor(transistorName));
                 transistor.get(k).setNode1(lineT.nextToken());
                 transistor.get(k).setGate(lineT.nextToken());
                 transistor.get(k).setNode2(lineT.nextToken());
@@ -78,6 +87,9 @@ public class GraphGenerator {
                 k++;
             }
         }
+        /*for(Transistor i : transistor){
+            System.out.println(i.getGate());
+        }*/
         return transistor;
     }
 
